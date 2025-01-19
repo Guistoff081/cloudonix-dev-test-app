@@ -1,0 +1,27 @@
+<div class="custom-properties" [formGroup]="productPropertyForm">
+    <div class="custom-properties-header">
+        <h3>Custom Properties</h3>
+        <button mat-raised-button color="primary" (click)="addProperty()">
+            Add Property
+        </button>
+    </div>
+
+    <div formArrayName="properties" class="properties-list">
+        <div *ngFor="let property of properties.controls; let i=index" [formGroupName]="i" class="property-item">
+            <mat-form-field appearance="outline">
+                <mat-label>Key</mat-label>
+                <input matInput formControlName="key" [readonly]="!!initialProperties[property.value.key]">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Value</mat-label>
+                <input matInput formControlName="value">
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeProperty(i)"
+                [disabled]="!!initialProperties[property.value.key]">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

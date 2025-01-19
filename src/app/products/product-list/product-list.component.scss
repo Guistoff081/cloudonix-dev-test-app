@@ -1,0 +1,24 @@
+.product-list-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  max-height: 100vh;
+}
+
+.full-width-table {
+  width: 100%;
+  height: fit-content;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}

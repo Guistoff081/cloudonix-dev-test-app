@@ -1,0 +1,66 @@
+<div class="product-form-container">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" [readonly]="isViewMode">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" [readonly]="isViewMode"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>SKU</mat-label>
+            <input matInput formControlName="sku" [readonly]="isViewMode">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Cost</mat-label>
+            <input matInput type="number" formControlName="cost" [readonly]="isViewMode" step="0.01">
+        </mat-form-field>
+
+        <div formGroupName="profile">
+            <mat-form-field>
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="type" [disabled]="isViewMode">
+                    <mat-option value="furniture">Furniture</mat-option>
+                    <mat-option value="equipment">Equipment</mat-option>
+                    <mat-option value="stationary">Stationary</mat-option>
+                    <mat-option value="part">Part</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="available" [disabled]="isViewMode">Available</mat-checkbox>
+
+            <mat-form-field>
+                <mat-label>Backlog</mat-label>
+                <input matInput type="number" formControlName="backlog" [readonly]="isViewMode">
+            </mat-form-field>
+        </div>
+
+        <div formArrayName="customProperties">
+            <div *ngFor="let customProperty of customPropertiesControls; let i = index"
+                [formGroupName]="i">
+                <mat-form-field>
+                    <mat-label>Key</mat-label>
+                    <input matInput formControlName="key" [readonly]="isViewMode">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Value</mat-label>
+                    <input matInput formControlName="value" [readonly]="isViewMode">
+                </mat-form-field>
+                <button mat-icon-button color="warn" (click)="removeCustomProperty(i)" *ngIf="!isViewMode">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <button mat-raised-button color="primary" (click)="addCustomProperty()" *ngIf="!isViewMode">Add Custom
+                Property</button>
+        </div>
+
+        <div class="form-actions" *ngIf="!isViewMode">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
+</div>
