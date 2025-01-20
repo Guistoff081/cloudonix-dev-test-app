@@ -1,23 +1,48 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-    private authToken = new BehaviorSubject<string>('');
+  private authToken = new BehaviorSubject<string>(this.getTokenFromStorage());
+  private isAuthenticated = new BehaviorSubject<boolean>(this.isTokenPresent());
 
-    setToken(token: string) {
-        this.authToken.next(token);
-        localStorage.setItem('token', token);
-    }
+  constructor() {
+    this.checkInitialAuthState();
+  }
 
-    getToken() {
-        return this.authToken.value || localStorage.getItem('token');
-    }
+  setToken(token: string): void {
+    this.authToken.next(token);
+    localStorage.setItem('authKey', token);
+    this.isAuthenticated.next(true);
+  }
 
-    logout() {
-        this.authToken.next('');
-        localStorage.removeItem('token');
+  getToken(): string | null {
+    return this.authToken.value || localStorage.getItem('authKey');
+  }
+
+  logout(): void {
+    this.authToken.next('');
+    localStorage.removeItem('authKey');
+    this.isAuthenticated.next(false);
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.isAuthenticated.asObservable();
+  }
+
+  private getTokenFromStorage(): string {
+    return localStorage.getItem('authKey') || '';
+  }
+  private isTokenPresent(): boolean {
+    return !!localStorage.getItem('authKey');
+  }
+  private checkInitialAuthState(): void {
+    if (this.getToken()) {
+      this.isAuthenticated.next(true);
+    } else {
+      this.isAuthenticated.next(false);
     }
+  }
 }
