@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,14 +22,16 @@ import { map, shareReplay } from 'rxjs/operators';
     MatListModule,
     MatIconModule,
     AsyncPipe,
-  ]
+    RouterOutlet,
+  ],
 })
 export class LayoutComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map((result) => result.matches),
       shareReplay()
     );
 }
