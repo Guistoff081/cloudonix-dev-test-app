@@ -53,21 +53,27 @@
             </div>
 
             <div class="form-group">
-                <mat-checkbox formControlName="available">Available</mat-checkbox>
-            </div>
-
-            <div class="form-group">
                 <mat-form-field appearance="fill">
                     <mat-label>Backlog</mat-label>
                     <input matInput type="number" formControlName="backlog" />
                 </mat-form-field>
             </div>
+
+            <div class="form-group">
+                <mat-checkbox formControlName="available">Available</mat-checkbox>
+            </div>
+
+            <div class="form-group">
+                <app-product-property-editor [parentForm]="productForm" [isViewMode]="isViewMode"
+                    (propertiesChange)="onPropertiesChange($event)">
+                </app-product-property-editor>
+            </div>
         </div>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-        <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">
+        <button mat-button mat-dialog-close>{{ isViewMode ? 'Close' : 'Cancel' }}</button>
+        <button *ngIf="!isViewMode" mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">
             {{ isEditMode ? 'Update' : 'Create' }}
         </button>
     </mat-dialog-actions>

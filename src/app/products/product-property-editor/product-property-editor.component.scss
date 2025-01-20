@@ -1,10 +1,79 @@
-.custom-properties {
-    margin-top: 1rem;
+// .key-value-editor {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1rem;
+// }
 
-    .custom-properties-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
+// .property {
+//     display: flex;
+//     align-items: center;
+//     gap: 1rem;
+// }
+
+// .mat-form-field {
+//     flex: 1;
+// }
+
+// button {
+//     align-self: flex-start;
+// }
+
+// .property-row {
+//     display: flex;
+//     gap: 1rem;
+//     align-items: center;
+// }
+
+// .property-actions {
+//     display: flex;
+//     gap: 0.5rem;
+// }
+
+// .custom-properties-container {
+//     padding: 1rem;
+// }
+
+// .property-row {
+//     margin-bottom: 1rem;
+// }
+
+// .actions {
+//     min-width: 90px;
+// }
+
+.custom-properties-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.property-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.property-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.key-field {
+    width: 30%;
+}
+
+.value-field {
+    width: 50%;
+}
+
+.property-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.add-property form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }

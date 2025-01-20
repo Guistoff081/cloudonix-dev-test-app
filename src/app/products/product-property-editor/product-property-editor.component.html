@@ -1,27 +1,96 @@
-<div class="custom-properties" [formGroup]="productPropertyForm">
-    <div class="custom-properties-header">
-        <h3>Custom Properties</h3>
-        <button mat-raised-button color="primary" (click)="addProperty()">
-            Add Property
-        </button>
+<!-- <div class="key-value-editor" [formGroup]="form">
+    <div formArrayName="properties">
+        <div class="property-row" *ngFor="let prop of propertiesFormArray.controls; let i=index" [formGroupName]="i">
+            <mat-form-field appearance="fill">
+                <mat-label>Key</mat-label>
+                <input matInput formControlName="key" placeholder="Enter key"
+                    [readonly]="isViewMode || (!propertyStates[i].isNew && !propertyStates[i].isEditing)">
+                <mat-error *ngIf="prop.get('key')?.hasError('required')">
+                    Key is required
+                </mat-error>
+                <mat-error *ngIf="prop.get('key')?.hasError('duplicate')">
+                    Key must be unique
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Value</mat-label>
+                <input matInput formControlName="value" placeholder="Enter value"
+                    [readonly]="isViewMode || !propertyStates[i].isEditing">
+                <mat-error *ngIf="prop.get('value')?.hasError('required')">
+                    Value is required
+                </mat-error>
+            </mat-form-field>
+
+            <div class="property-actions">
+                <ng-container *ngIf="!isViewMode">
+                    <button mat-icon-button color="primary" type="button" *ngIf="propertyStates[i]?.isEditing"
+                        (click)="saveProperty(i)" aria-label="Save property">
+                        <mat-icon>check</mat-icon>
+                    </button>
+
+                    <button mat-icon-button color="primary" type="button"
+                        *ngIf="!propertyStates[i]?.isEditing && !propertyStates[i]?.isNew" (click)="editProperty(i)"
+                        aria-label="Edit property">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button mat-icon-button color="warn" type="button" (click)="removeProperty(i)"
+                        aria-label="Remove property">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
     </div>
 
-    <div formArrayName="properties" class="properties-list">
-        <div *ngFor="let property of properties.controls; let i=index" [formGroupName]="i" class="property-item">
-            <mat-form-field appearance="outline">
+    <button *ngIf="!isViewMode" mat-button color="primary" type="button" (click)="addProperty()" class="mt-4">
+        <mat-icon>add</mat-icon>
+        Add Custom Property
+    </button>
+</div> -->
+
+<div class="custom-properties-container">
+    <div class="property-list">
+        <div *ngFor="let prop of properties" class="property-item">
+            <mat-form-field appearance="outline" class="key-field">
                 <mat-label>Key</mat-label>
-                <input matInput formControlName="key" [readonly]="!!initialProperties[property.value.key]">
+                <input matInput [value]="prop.key" readonly />
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="value-field">
                 <mat-label>Value</mat-label>
-                <input matInput formControlName="value">
+                <input matInput [(ngModel)]="prop.value" [readonly]="!prop.isEditing || isViewMode"
+                    (blur)="onValueBlur(prop)" />
             </mat-form-field>
 
-            <button mat-icon-button color="warn" (click)="removeProperty(i)"
-                [disabled]="!!initialProperties[property.value.key]">
-                <mat-icon>delete</mat-icon>
-            </button>
+            <div class="property-actions">
+                <button mat-icon-button *ngIf="!isViewMode" (click)="toggleEdit(prop)" [disabled]="isViewMode">
+                    <mat-icon>{{prop.isEditing ? 'check' : 'edit'}}</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" *ngIf="!isViewMode" (click)="removeProperty(prop)"
+                    [disabled]="isViewMode">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
         </div>
+    </div>
+
+    <div class="add-property" *ngIf="!isViewMode">
+        <form [formGroup]="newPropertyForm" (ngSubmit)="addProperty()">
+            <mat-form-field appearance="outline" class="key-field">
+                <mat-label>New Key</mat-label>
+                <input matInput formControlName="newKey" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="value-field">
+                <mat-label>New Value</mat-label>
+                <input matInput formControlName="newValue" />
+            </mat-form-field>
+
+            <button mat-icon-button color="primary" type="submit" [disabled]="newPropertyForm.invalid">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
     </div>
 </div>

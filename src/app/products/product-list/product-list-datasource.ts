@@ -1,8 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
-import { Observable, BehaviorSubject, merge } from 'rxjs';
+import { map, tap, catchError, finalize } from 'rxjs/operators';
+import { Observable, BehaviorSubject, merge, throwError } from 'rxjs';
 import { Product } from '../shared/product.model';
 import { ProductService } from '../shared/product.service';
 
@@ -19,6 +19,10 @@ export class ProductListDataSource extends DataSource<Product> {
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
+
+  public setLoading(loading: boolean): void {
+    this.loadingSubject.next(loading);
+  }
 
   constructor(private productService: ProductService) {
     super();
@@ -62,16 +66,17 @@ export class ProductListDataSource extends DataSource<Product> {
 
   loadProducts() {
     this.loadingSubject.next(true);
-    this.productService.getProducts().subscribe({
-      next: (products) => {
+    return this.productService.getProducts().pipe(
+      tap((products) => {
         this.data = products;
         this.productsSubject.next(products);
+      }),
+      catchError((error) => {
         this.loadingSubject.next(false);
-      },
-      error: () => {
-        this.loadingSubject.next(false);
-      },
-    });
+        return throwError(() => error);
+      }),
+      finalize(() => this.loadingSubject.next(false))
+    );
   }
 
   /**
@@ -81,10 +86,9 @@ export class ProductListDataSource extends DataSource<Product> {
   private getPagedData(data: Product[]): Product[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    } else {
-      return data;
+      return [...data].slice(startIndex, startIndex + this.paginator.pageSize);
     }
+    return data;
   }
 
   /**

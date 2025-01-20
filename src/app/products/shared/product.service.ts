@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Product } from './product.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private apiUrl = 'http://rest-items.research.cloudonix.io/items';
