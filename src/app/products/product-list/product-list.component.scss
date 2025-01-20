@@ -5,9 +5,14 @@
   max-height: 100vh;
 }
 
+.table-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
 .full-width-table {
   width: 100%;
-  height: fit-content;
 }
 
 .toolbar-spacer {
@@ -15,7 +20,6 @@
 }
 
 .mat-column-actions {
-  width: 120px;
   text-align: center;
 }
 

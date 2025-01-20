@@ -57,6 +57,11 @@ export class ProductListComponent implements AfterViewInit {
 
   loadProducts(): void {
     this.dataSource.loadProducts();
+    this.dataSource.loading$.subscribe(loading => {
+      if (!loading) {
+        this.paginator.length = this.dataSource.data.length; // Update paginator length
+      }
+    });
   }
 
   confirmDelete(product: Product): void {
@@ -95,8 +100,17 @@ export class ProductListComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.productService.createProduct(result.product);
-        this.loadProducts();
+        // Ensure to subscribe to the createProduct observable
+        this.productService.createProduct(result.product).subscribe({
+          next: () => {
+            this.loadProducts();
+          },
+          error: () => {
+            this.snackBar.open('Error creating product', 'Close', {
+              duration: 3000,
+            });
+          },
+        });
       }
     });
   }

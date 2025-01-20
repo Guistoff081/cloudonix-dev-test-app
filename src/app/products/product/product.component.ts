@@ -7,7 +7,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDialogModule
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
@@ -48,9 +49,9 @@ export class ProductComponent implements OnInit {
     this.isViewMode = this.data.viewMode;
 
     this.productForm = this.fb.group({
-      name: [{ value: '', disabled: this.isViewMode }, Validators.required],
-      description: [{ value: '', disabled: this.isViewMode }],
-      sku: [{ value: '', disabled: this.isViewMode }, Validators.required],
+      name: [{ value: '', disabled: this.isViewMode }, Validators.required, Validators.maxLength(50)],
+      description: [{ value: '', disabled: this.isViewMode }, Validators.required, Validators.maxLength(200)],
+      sku: [{ value: '', disabled: this.isViewMode }, Validators.required, Validators.maxLength(20)],
       cost: [
         { value: 0, disabled: this.isViewMode },
         [Validators.required, Validators.min(0)],
